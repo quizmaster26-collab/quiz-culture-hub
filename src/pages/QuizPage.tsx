@@ -21,24 +21,15 @@ const QuizPage = () => {
   const question = quiz?.questions[currentIndex];
   const isLast = quiz ? currentIndex === quiz.questions.length - 1 : false;
 
-  if (!quiz || !question) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">Quiz-ul nu a fost găsit.</p>
-      </div>
-    );
-  }
-
   const handleSelect = (index: number) => {
     if (phase !== "question") return;
     setSelectedIndex(index);
   };
 
   const handleNext = useCallback(() => {
-    if (selectedIndex === null) return;
+    if (selectedIndex === null || !question) return;
 
     if (phase === "question") {
-      // Show feedback
       if (selectedIndex === question.correctIndex) {
         setScore((s) => s + 1);
       }
@@ -58,6 +49,7 @@ const QuizPage = () => {
   }, [phase, selectedIndex, question, isLast]);
 
   const getAnswerState = (index: number) => {
+    if (!question) return "default" as const;
     if (phase === "question") {
       return index === selectedIndex ? "selected" : "default";
     }
@@ -66,10 +58,11 @@ const QuizPage = () => {
       if (index === selectedIndex) return "incorrect";
       return "default";
     }
-    return "default";
+    return "default" as const;
   };
 
   const getResultMessage = () => {
+    if (!quiz) return "";
     const pct = score / quiz.questions.length;
     if (pct === 1) return "Perfect! Cunoștințe impecabile! 🏆";
     if (pct >= 0.8) return "Excelent! Ești foarte bine pregătit!";
@@ -77,6 +70,14 @@ const QuizPage = () => {
     if (pct >= 0.4) return "Nu-i rău, dar mai exersează!";
     return "Mai ai de lucru, dar nu renunța!";
   };
+
+  if (!quiz || !question) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-muted-foreground">Quiz-ul nu a fost găsit.</p>
+      </div>
+    );
+  }
 
   // INTRO
   if (phase === "intro") {
