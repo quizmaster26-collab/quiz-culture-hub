@@ -5,12 +5,7 @@ import { quizzes } from "@/data/quizzes";
 import ProgressBar from "@/components/ProgressBar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, RotateCcw, Trophy, Target, Zap } from "lucide-react";
-import lolBg from "@/assets/lol.jpg";
-import cs2Bg from "@/assets/cs2.jpg";
-import minecraftBg from "@/assets/minecraft.jpg";
-import fortniteBg from "@/assets/fortnite.jpg";
-import gtaBg from "@/assets/gta.jpg";
-import gamingBg from "@/assets/gaming.jpg";
+
 
 type Phase = "intro" | "question" | "feedback" | "result";
 
