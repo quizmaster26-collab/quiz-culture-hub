@@ -5,6 +5,12 @@ import { quizzes } from "@/data/quizzes";
 import ProgressBar from "@/components/ProgressBar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, RotateCcw, Trophy, Target, Zap } from "lucide-react";
+import lolBg from "@/assets/lol.jpg";
+import cs2Bg from "@/assets/cs2.jpg";
+import minecraftBg from "@/assets/minecraft.jpg";
+import fortniteBg from "@/assets/fortnite.jpg";
+import gtaBg from "@/assets/gta.jpg";
+import gamingBg from "@/assets/gaming.jpg";
 
 type Phase = "intro" | "question" | "feedback" | "result";
 
@@ -12,6 +18,16 @@ const QuizPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const quiz = quizzes.find((q) => q.id === id);
+  const backgroundMap: Record<string, string> = {
+  "league-of-legends": lolBg,
+  "cs2": cs2Bg,
+  "minecraft": minecraftBg,
+  "fortnite": fortniteBg,
+  "gta": gtaBg,
+  "gaming-general": gamingBg,
+};
+
+const bgImage = backgroundMap[id || ""] || gamingBg;
 
   const [phase, setPhase] = useState<Phase>("intro");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -82,42 +98,60 @@ const QuizPage = () => {
   // INTRO
   if (phase === "intro") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-lg text-center"
-        >
-          <span className="text-7xl mb-6 block animate-float">{quiz.icon}</span>
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground text-glow" style={{ letterSpacing: "-0.03em" }}>
-            {quiz.title}
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground text-balance">
-            {quiz.description}
-          </p>
-          <div className="mt-3 flex items-center justify-center gap-4 text-sm font-mono-game text-muted-foreground">
-            <span>{quiz.questionCount} întrebări</span>
-            <span>•</span>
-            <span>{quiz.difficulty}</span>
-          </div>
-          <div className="mt-10 flex flex-col items-center gap-3">
-            <Button
-              variant="neon"
-              size="xl"
-              onClick={() => setPhase("question")}
-            >
-              Începe Quiz
-            </Button>
-            <button
-              onClick={() => navigate("/")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              ← Înapoi la quiz-uri
-            </button>
-          </div>
-        </motion.div>
-      </div>
+  <div className="relative min-h-screen flex flex-col px-6 py-8 overflow-hidden">
+
+    {/* BACKGROUND */}
+    <div
+      className="absolute inset-0 bg-cover bg-center scale-105 blur-sm"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    />
+
+    {/* OVERLAY */}
+    <div className="absolute inset-0 bg-black/70" />
+
+    {/* CONTENT */}
+   <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center">
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}
+    className="w-full max-w-lg"
+  >
+    <span className="text-7xl mb-6 block animate-float">{quiz.icon}</span>
+
+    <h1 className="text-3xl md:text-5xl font-bold text-glow">
+      {quiz.title}
+    </h1>
+
+    <p className="mt-4 text-lg text-muted-foreground">
+      {quiz.description}
+    </p>
+
+    <div className="mt-3 flex items-center justify-center gap-4 text-sm text-muted-foreground">
+      <span>{quiz.questionCount} întrebări</span>
+      <span>•</span>
+      <span>{quiz.difficulty}</span>
+    </div>
+
+    {/* BUTOANELE AICI */}
+    <div className="mt-10 flex flex-col items-center gap-3">
+      <Button
+        variant="neon"
+        size="xl"
+        onClick={() => setPhase("question")}
+      >
+        Începe Quiz
+      </Button>
+
+      <button
+        onClick={() => navigate("/")}
+        className="text-sm text-muted-foreground hover:text-foreground"
+      >
+        ← Înapoi la quiz-uri
+      </button>
+    </div>
+  </motion.div>
+</div>
     );
   }
 
