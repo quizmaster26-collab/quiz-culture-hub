@@ -65,7 +65,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="mt-auto py-8 text-center">
         <p className="text-xs text-muted-foreground font-mono-game">
-          Made with ❤️ for gamers
+          Made with ❤️ for gamers. QuizGaming - Al Right Reserved
         </p>
       </footer>
     </div>
